@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pengaturan</title>
+  <link rel="stylesheet" href="<?= base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.css') ?>">
+  <link rel="stylesheet" href="<?= base_url('assets/vendor/adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') ?>">
+  <?= view('partials/head') ?>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+  <?= view('includes/nav') ?>
+  <?= view('includes/aside') ?>
+  <div class="content-wrapper">
+    <div class="content-header"><div class="container-fluid"><div class="row mb-2"><div class="col"><h1 class="m-0 text-dark">Pengaturan</h1></div></div></div></div>
+    <section class="content">
+      <div class="container-fluid"><div class="card"><div class="card-body">
+        <form id="toko">
+          <div class="form-row"><div class="col-6">
+            <div class="form-group"><label>Nama Toko</label><input type="text" class="form-control" placeholder="Nama Toko" name="nama" value="<?= esc($toko['nama'] ?? '') ?>" required></div>
+            <div class="form-group"><label>Alamat</label><textarea name="alamat" placeholder="Alamat" class="form-control" required><?= esc($toko['alamat'] ?? '') ?></textarea></div>
+            <div class="form-group"><button class="btn btn-success" type="submit">Simpan</button></div>
+          </div></div>
+        </form>
+      </div></div></div>
+    </section>
+  </div>
+</div>
+<?= view('includes/footer') ?>
+<?= view('partials/footer') ?>
+<script src="<?= base_url('assets/vendor/adminlte/plugins/jquery-validation/jquery.validate.min.js') ?>"></script>
+<script src="<?= base_url('assets/vendor/adminlte/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
+<script>
+  $('#toko').validate({
+    errorElement: 'span',
+    errorPlacement: (error, element) => { error.addClass('invalid-feedback'); element.closest('.form-group').append(error) },
+    submitHandler: (form, e) => {
+      e.preventDefault();
+      $.ajax({
+        url: '<?= site_url('pengaturan/set_toko') ?>',
+        type: 'post',
+        dataType: 'json',
+        data: $(form).serialize(),
+        success: res => {
+          $('.brand-text').text($('[name="nama"]').val());
+          Swal.fire('Sukses', 'Sukses Mengedit', 'success');
+        }
+      });
+      return false;
+    }
+  })
+</script>
+</body>
+</html>
